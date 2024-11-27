@@ -1,0 +1,333 @@
+<div class="container mt-4">
+  <h3>{{ isEdit ? "Editar Cliente" : "Novo Cliente" }}</h3>
+
+  <form [formGroup]="clienteForm" (ngSubmit)="salvarCliente()" class="mt-4">
+    <div class="accordion" id="accordionCliente">
+      <!-- Pessoa -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingPessoa">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePessoa"
+            aria-expanded="true"
+            aria-controls="collapsePessoa"
+          >
+            Pessoa
+          </button>
+        </h2>
+        <div
+          id="collapsePessoa"
+          class="accordion-collapse collapse show"
+          aria-labelledby="headingPessoa"
+          data-bs-parent="#accordionCliente"
+        >
+          <div class="accordion-body row g-3">
+            <!-- Tipo de Pessoa -->
+            <div class="col-md-6">
+              <label class="form-label">Tipo de Pessoa</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    id="pessoaFisica"
+                    class="form-check-input"
+                    formControlName="tipoPessoa"
+                    value="fisica"
+                    (change)="onTipoPessoaChange('fisica')"
+                  />
+                  <label for="pessoaFisica" class="form-check-label"
+                    >Física</label
+                  >
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    id="pessoaJuridica"
+                    class="form-check-input"
+                    formControlName="tipoPessoa"
+                    value="juridica"
+                    (change)="onTipoPessoaChange('juridica')"
+                  />
+                  <label for="pessoaJuridica" class="form-check-label"
+                    >Jurídica</label
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- CPF/CNPJ -->
+            <div class="col-md-6">
+              <label for="cpf_cnpj" class="form-label">CPF/CNPJ</label>
+              <input
+                type="text"
+                id="cpf_cnpj"
+                class="form-control"
+                formControlName="cpf_cnpj"
+                [placeholder]="
+                  tipoPessoa === 'fisica' ? 'Digite o CPF' : 'Digite o CNPJ'
+                "
+                [disabled]="isEdit"
+              />
+            </div>
+            <!-- Nome -->
+            <div class="col-md-6">
+              <label for="nome" class="form-label">Nome</label>
+              <input
+                type="text"
+                id="nome"
+                class="form-control"
+                formControlName="nome"
+              />
+            </div>
+            <!-- Telefone -->
+            <div class="col-md-6">
+              <label for="telefone" class="form-label">Telefone</label>
+              <input
+                type="text"
+                id="telefone"
+                class="form-control"
+                formControlName="telefone"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingEndereco">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseEndereco"
+            aria-expanded="false"
+            aria-controls="collapseEndereco"
+          >
+            Endereço
+          </button>
+        </h2>
+        <div
+          id="collapseEndereco"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingEndereco"
+          data-bs-parent="#accordionCliente"
+        >
+          <div class="accordion-body row g-3">
+            <!-- CEP -->
+            <div class="col-md-6">
+              <label for="cep" class="form-label">CEP</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="cep"
+                  class="form-control"
+                  formControlName="cep"
+                  maxlength="8"
+                  placeholder="Somente números"
+                  mask="00000-000"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="buscarEnderecoPorCep()"
+                >
+                  <span *ngIf="!loading">Buscar</span>
+                  <div
+                    *ngIf="loading"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                  ></div>
+                </button>
+              </div>
+            </div>
+            <!-- Logradouro -->
+            <div class="col-md-6">
+              <label for="logradouro" class="form-label">Logradouro</label>
+              <input
+                type="text"
+                id="logradouro"
+                class="form-control"
+                formControlName="logradouro"
+              />
+            </div>
+            <!-- Complemento -->
+            <div class="col-md-6">
+              <label for="complemento" class="form-label">Complemento</label>
+              <input
+                type="text"
+                id="complemento"
+                class="form-control"
+                formControlName="complemento"
+              />
+            </div>
+            <!-- Unidade -->
+            <div class="col-md-6">
+              <label for="unidade" class="form-label">Unidade</label>
+              <input
+                type="text"
+                id="unidade"
+                class="form-control"
+                formControlName="unidade"
+              />
+            </div>
+            <!-- Bairro -->
+            <div class="col-md-6">
+              <label for="bairro" class="form-label">Bairro</label>
+              <input
+                type="text"
+                id="bairro"
+                class="form-control"
+                formControlName="bairro"
+              />
+            </div>
+            <!-- Localidade -->
+            <div class="col-md-6">
+              <label for="localidade" class="form-label">Localidade</label>
+              <input
+                type="text"
+                id="localidade"
+                class="form-control"
+                formControlName="localidade"
+              />
+            </div>
+            <!-- UF -->
+            <div class="col-md-6">
+              <label for="uf" class="form-label">UF</label>
+              <input
+                type="text"
+                id="uf"
+                class="form-control"
+                formControlName="uf"
+              />
+            </div>
+            <!-- Estado -->
+            <div class="col-md-6">
+              <label for="estado" class="form-label">Estado</label>
+              <input
+                type="text"
+                id="estado"
+                class="form-control"
+                formControlName="estado"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Identificação -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingIdentificacao">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseIdentificacao"
+            aria-expanded="false"
+            aria-controls="collapseIdentificacao"
+          >
+            Informações Regionais
+          </button>
+        </h2>
+        <div
+          id="collapseIdentificacao"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingIdentificacao"
+          data-bs-parent="#accordionCliente"
+        >
+          <div class="accordion-body row g-3">
+            <!-- Região -->
+            <div class="col-md-6">
+              <label for="regiao" class="form-label">Região</label>
+              <input
+                type="text"
+                id="regiao"
+                class="form-control"
+                formControlName="regiao"
+              />
+            </div>
+            <!-- IBGE -->
+            <div class="col-md-6">
+              <label for="ibge" class="form-label">IBGE</label>
+              <input
+                type="text"
+                id="ibge"
+                class="form-control"
+                formControlName="ibge"
+              />
+            </div>
+            <!-- DDD -->
+            <div class="col-md-6">
+              <label for="ddd" class="form-label">DDD</label>
+              <input
+                type="text"
+                id="ddd"
+                class="form-control"
+                formControlName="ddd"
+              />
+            </div>
+            <!-- SIAFI -->
+            <div class="col-md-6">
+              <label for="siafi" class="form-label">SIAFI</label>
+              <input
+                type="text"
+                id="siafi"
+                class="form-control"
+                formControlName="siafi"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Observações -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingObservacoes">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseObservacoes"
+            aria-expanded="false"
+            aria-controls="collapseObservacoes"
+          >
+            Observações
+          </button>
+        </h2>
+        <div
+          id="collapseObservacoes"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingObservacoes"
+          data-bs-parent="#accordionCliente"
+        >
+          <div class="accordion-body">
+            <label for="observacoes" class="form-label">Observações</label>
+            <textarea
+              id="observacoes"
+              class="form-control"
+              rows="4"
+              formControlName="observacoes"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end mt-3">
+      <button type="submit" class="btn btn-primary me-2">
+        <i class="fas fa-save"></i>
+        <span *ngIf="!loading">{{ isEdit ? "Atualizar" : "Salvar" }}</span>
+        <div
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+        ></div>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </form>
+</div>

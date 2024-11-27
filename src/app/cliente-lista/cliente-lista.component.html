@@ -1,0 +1,124 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Lista de Clientes</h3>
+    <button class="btn btn-success" (click)="novoCliente()">
+      <i class="fas fa-plus me-2"></i> Novo Cliente
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form (ngSubmit)="aplicarFiltro()" class="row g-3">
+        <div class="col-md-4">
+          <label for="tipoFiltro" class="form-label">Tipo de Filtro</label>
+          <select
+            id="tipoFiltro"
+            [(ngModel)]="tipoFiltro"
+            name="tipoFiltro"
+            class="form-select"
+            required
+          >
+            <option value="" disabled>Selecione o tipo de filtro</option>
+            <option value="cpf_cnpj">CPF/CNPJ</option>
+            <option value="nome">Nome</option>
+            <option value="cep">CEP</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="valorFiltro" class="form-label">Valor</label>
+          <input
+            type="text"
+            id="valorFiltro"
+            [(ngModel)]="valorFiltro"
+            name="valorFiltro"
+            class="form-control"
+            placeholder="Digite o valor do filtro"
+            required
+          />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <i class="fas fa-search me-2"></i>
+            <span *ngIf="!loading">Buscar</span>
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span *ngIf="loading">Buscando...</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary ms-2"
+            (click)="limparFiltro()"
+          >
+            <i class="fas fa-eraser me-2"></i> Limpar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de Clientes -->
+  <div class="d-none d-md-block">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Cód. Cliente</th>
+          <th>CPF/CNPJ</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.id }}</td>
+          <td>{{ cliente.cpf_cnpj }}</td>
+          <td>{{ cliente.nome }}</td>
+          <td>{{ cliente.telefone }}</td>
+          <td>
+            <button
+              class="btn btn-primary btn-sm me-2"
+              (click)="editarCliente(cliente.id)"
+            >
+              <i class="fas fa-edit me-2"></i> Editar
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deletarCliente(cliente.id)"
+            >
+              <i class="fas fa-trash-alt me-2"></i> Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-md-none">
+    <div class="card mb-3" *ngFor="let cliente of clientes">
+      <div class="card-body">
+        <h5 class="card-title">{{ cliente.nome }}</h5>
+        <p class="card-text">
+          <strong>CPF/CNPJ:</strong> {{ cliente.cpf_cnpj }}<br />
+          <strong>Telefone:</strong> {{ cliente.telefone }}
+        </p>
+        <button
+          class="btn btn-primary btn-sm me-2"
+          (click)="editarCliente(cliente.id)"
+        >
+          <i class="fas fa-edit me-2"></i> Editar
+        </button>
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="deletarCliente(cliente.id)"
+        >
+          <i class="fas fa-trash-alt me-2"></i> Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
